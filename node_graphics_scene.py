@@ -25,12 +25,11 @@ class NodeGraphicsScene(QGraphicsScene):
 
         self.scene_width = 64000
         self.scene_height = 64000
-        self.setSceneRect(self.scene_width//2, self.scene_height//2, self.scene_width, self.scene_height)
+        self.setSceneRect(-self.scene_width//2, -self.scene_height//2, self.scene_width, self.scene_height)
 
 
     def drawBackground(self, painter, rect):
         super().drawBackground(painter, rect)
-
         # Draw the grid
         left = int(math.floor(rect.left()))
         right = int(math.ceil(rect.right()))
