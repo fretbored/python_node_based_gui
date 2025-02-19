@@ -2,14 +2,17 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-from node_graphics_scene import NodeGraphicsScene
+from node_scene import Scene
+from node_node import Node
 from node_graphics_view import NodeGraphicsView
 
 
 class NodeEditorWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-
+        self.stylesheet_path = 'qss/node_style.qss'
+        self.load_stylesheet(self.stylesheet_path)
+        
         self.init_ui()
 
 
@@ -33,7 +36,9 @@ class NodeEditorWindow(QWidget):
         self.setLayout(self.layout)
 
         # Create graphics scene
-        self.graphics_scene = NodeGraphicsScene()
+        self.scene = Scene()
+        self.graphics_scene = self.scene.gr_scene
+        node = Node(self.scene, 'My First Node')
         # Create graphics view
         self.view = NodeGraphicsView(self.graphics_scene, self)
         self.layout.addWidget(self.view)
@@ -41,7 +46,7 @@ class NodeEditorWindow(QWidget):
         self.center_window()
         self.show()
 
-        self.add_debug_content()
+        # self.add_debug_content()
 
 
     def add_debug_content(self):
@@ -70,3 +75,9 @@ class NodeEditorWindow(QWidget):
         line = self.graphics_scene.addLine(-200, -200, 400, -100, outline_pen)
         line.setFlag(QGraphicsItem.ItemIsSelectable)
         line.setFlag(QGraphicsItem.ItemIsMovable)
+
+
+    def load_stylesheet(self, path):
+        print(f'Loading stylesheet from: {path}...')
+        with open(path, 'r') as f:
+            QApplication.instance().setStyleSheet(f.read())

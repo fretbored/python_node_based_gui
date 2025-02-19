@@ -6,8 +6,9 @@ from PyQt5.QtGui import *
 
 
 class NodeGraphicsScene(QGraphicsScene):
-    def __init__(self, parent=None):
+    def __init__(self, scene, parent=None):
         super().__init__(parent)
+        self.scene = scene
         # Settings
         self.grid_size = 20
         self.grid_squares = 4
@@ -25,7 +26,10 @@ class NodeGraphicsScene(QGraphicsScene):
 
         self.scene_width = 64000
         self.scene_height = 64000
-        self.setSceneRect(-self.scene_width//2, -self.scene_height//2, self.scene_width, self.scene_height)
+
+
+    def set_gr_scene(self, width, height):
+        self.setSceneRect(-width//2, -height//2, width, height)
 
 
     def drawBackground(self, painter, rect):

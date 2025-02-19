@@ -110,7 +110,6 @@ class NodeGraphicsView(QGraphicsView):
             zoom_clamping = True
             self.zoom = self.zoom_range[1]
 
-        print(f'{self.zoom=}')
         # Zoom in our out based on the zoom factor.
         if not zoom_clamping:
             self.scale(zoom_factor, zoom_factor)

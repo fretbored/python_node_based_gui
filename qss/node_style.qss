@@ -1,0 +1,9 @@
+NodeContentWidget
+{
+    background: transparent;
+}
+
+NodeContentWidget QLabel
+{
+    color: rgb(225, 225, 225);
+}
