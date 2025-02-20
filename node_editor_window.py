@@ -38,11 +38,12 @@ class NodeEditorWindow(QWidget):
 
         # Create graphics scene
         self.scene = Scene()
-        self.graphics_scene = self.scene.gr_scene
+        self.graphics_scene = self.scene
         node = Node(self.scene,
                     'My First Node',
                     inputs=['foo', 'bar'],
-                    outputs=['baz'])
+                    outputs=['baz'],
+                    parent=self)
         # Create graphics view
         self.view = NodeGraphicsView(self.graphics_scene, self)
         self.layout.addWidget(self.view)
