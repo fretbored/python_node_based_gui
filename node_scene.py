@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+from node_node import Node
+
 
 class Scene(QGraphicsScene):
     def __init__(self, parent=None):
@@ -74,7 +76,20 @@ class Scene(QGraphicsScene):
         painter.drawLines(grid_lines_dark)
 
 
-    def add_node(self, node):
+    def contextMenuEvent(self, event):
+        menu = QMenu()
+        add_action = QAction('Add Node', menu)
+        add_action.triggered.connect(lambda: self.add_node(event.scenePos()))
+        menu.addAction(add_action)
+        menu.exec_(event.screenPos())
+
+
+    def add_node(self, position):
+        node = Node('My First Node',
+                    inputs=['foo', 'bar'],
+                    outputs=['baz'],
+                    parent=self)
+        node.setPos(position)
         self.nodes.append(node)
         self.addItem(node)
 
