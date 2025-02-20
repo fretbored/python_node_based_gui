@@ -13,8 +13,8 @@ class NodeGraphicsScene(QGraphicsScene):
         self.grid_size = 20
         self.grid_squares = 4
 
-        self.bgcolor = QColor(100, 100, 100, 255)
-        self.setBackgroundBrush(self.bgcolor)
+        self.bg_color = QColor(100, 100, 100, 255)
+        self.setBackgroundBrush(self.bg_color)
 
         self.pen_color_light = QColor(88, 88, 88, 255)
         self.small_grid_pen = QPen(self.pen_color_light)

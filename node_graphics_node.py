@@ -28,6 +28,7 @@ class NodeGraphicsNode(QGraphicsItem):
         self.title = self.node.title
 
         # Initialize sockets.
+        self.create_sockets(self.node.inputs, self.node.outputs)
 
         # Initialize content.
         self.create_content()
@@ -59,6 +60,10 @@ class NodeGraphicsNode(QGraphicsItem):
         self.title_item.setPos(self._padding, 0)
 
 
+    def create_sockets(self, inputs, outputs):
+        pass
+
+
     def create_content(self):
         self.gr_content = QGraphicsProxyWidget(self)
         self.content.setGeometry(self.edge_size,
@@ -69,10 +74,10 @@ class NodeGraphicsNode(QGraphicsItem):
         self.gr_content.setWidget(self.content)
 
     def boundingRect(self):
-        return QRectF(-self.edge_size,
-                      -self.edge_size,
-                      2* self.edge_size + self.width,
-                      2* self.edge_size + self.height
+        return QRectF(0,
+                      0,
+                      self.width,
+                      self.height
                       ).normalized()
 
 

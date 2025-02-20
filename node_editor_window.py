@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 
 from node_scene import Scene
 from node_node import Node
+from node_socket import Socket
 from node_graphics_view import NodeGraphicsView
 
 
@@ -38,7 +39,10 @@ class NodeEditorWindow(QWidget):
         # Create graphics scene
         self.scene = Scene()
         self.graphics_scene = self.scene.gr_scene
-        node = Node(self.scene, 'My First Node')
+        node = Node(self.scene,
+                    'My First Node',
+                    inputs=['foo', 'bar'],
+                    outputs=['baz'])
         # Create graphics view
         self.view = NodeGraphicsView(self.graphics_scene, self)
         self.layout.addWidget(self.view)
