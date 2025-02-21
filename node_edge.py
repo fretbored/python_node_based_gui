@@ -69,8 +69,8 @@ class Edge(QGraphicsPathItem):
             # The edge only has a start socket.
             end_pos = self.scene.mouse_position
         distance = (end_pos.x() - start_pos.x()) / 2
-        path.cubicTo(QPointF(start_pos.x() + distance, start_pos.y()),
-                    QPointF(end_pos.x() - distance, end_pos.y()),
+        path.cubicTo(QPointF(start_pos.x() + distance, start_pos.y() + buffer),
+                    QPointF(end_pos.x() - distance, end_pos.y() + buffer),
                     QPointF(end_pos.x(), end_pos.y() + buffer))
 
         self.setPath(path)
