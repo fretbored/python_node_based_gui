@@ -2,6 +2,9 @@ from PyQt5.QtWidgets import *
 
 
 class NodeContentWidget(QWidget):
+    """
+    Represents the content of a node.
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
 

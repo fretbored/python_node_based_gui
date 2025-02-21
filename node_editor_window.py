@@ -9,7 +9,17 @@ from node_graphics_view import NodeGraphicsView
 
 
 class NodeEditorWindow(QWidget):
+    """
+    Represents the main window used to create and edit nodes.
+    """
     def __init__(self, parent=None):
+        """
+        This constructor sets up the QWidget, loads a stylesheet for styling, and
+        initializes the user interface. The window can optionally have a parent.
+
+        Args:
+            parent (QWidget, optional): The parent widget of this window. Defaults to None.
+        """
         super().__init__(parent)
         self.stylesheet_path = 'qss/node_style.qss'
         self.load_stylesheet(self.stylesheet_path)

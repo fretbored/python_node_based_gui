@@ -43,6 +43,7 @@ class Node(QGraphicsRectItem):
         self.content = NodeContentWidget()
         self.create_content()
 
+        # Create a socket for each input and output.
         for i in range(len(self.inputs)):
             socket = Socket(node=self, index=i, position=SocketPosition.LEFT_BOTTOM)
             self.input_sockets.append(socket)

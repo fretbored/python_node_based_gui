@@ -9,7 +9,7 @@ class NodeGraphicsView(QGraphicsView):
         self.graphics_scene = graphics_scene
         self.init_ui()
         self.setScene(self.graphics_scene)
-
+        # Setup zoom settings.
         self.zoom_factor = 1.25
         self.zoom = 10
         self.zoom_step = 1
@@ -34,25 +34,20 @@ class NodeGraphicsView(QGraphicsView):
     def mousePressEvent(self, event):
         if event.button() == Qt.MiddleButton:
             self.middleMouseButtonPress(event)
-        elif event.button() == Qt.LeftButton:
-            self.leftMouseButtonPress(event)
-        elif event.button() == Qt.RightButton:
-            self.rightMouseButtonPress(event)
         else:
             super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.MiddleButton:
             self.middleMouseButtonRelease(event)
-        elif event.button() == Qt.LeftButton:
-            self.leftMouseButtonRelease(event)
-        elif event.button() == Qt.RightButton:
-            self.rightMouseButtonRelease(event)
         else:
             super().mouseReleaseEvent(event)
 
 
     def middleMouseButtonPress(self, event):
+        """
+        Use the middle mouse button to pan the view.
+        """
         left_release_event = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
                                     Qt.LeftButton, Qt.NoButton, event.modifiers())
         super().mouseReleaseEvent(left_release_event)
@@ -63,29 +58,19 @@ class NodeGraphicsView(QGraphicsView):
 
 
     def middleMouseButtonRelease(self, event):
+        """
+        Release the middle mouse button to stop panning the view.
+        """
         left_release_event = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
                             Qt.LeftButton, event.buttons() & ~Qt.LeftButton, event.modifiers())
         super().mouseReleaseEvent(left_release_event)
         self.setDragMode(QGraphicsView.NoDrag)
 
 
-    def leftMouseButtonPress(self, event):
-        return super().mousePressEvent(event)
-
-
-    def leftMouseButtonRelease(self, event):
-        return super().mouseReleaseEvent(event)
-
-
-    def rightMouseButtonPress(self, event):
-        return super().mousePressEvent(event)
-
-
-    def rightMouseButtonRelease(self, event):
-        return super().mouseReleaseEvent(event)
-
-
     def wheelEvent(self, event):
+        """
+        Use the mouse wheel to zoom in and out.
+        """
         # Calculate the zoom factor.
         zoom_out_factor = 1 / self.zoom_factor
 
