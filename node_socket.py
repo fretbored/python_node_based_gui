@@ -18,6 +18,7 @@ class Socket(QGraphicsEllipseItem):
         self.node = node
         self.index = index
         self.position = position
+        self.connections = []
 
         # Setup socket appearance.
         self.radius = radius
@@ -29,10 +30,19 @@ class Socket(QGraphicsEllipseItem):
         self._pen.setWidth(self.outline_width)
         self._brush = QBrush(self.bg_color)
 
-        self.setPos(*self.node.get_socket_placement(self.index, self.position))
+        socket_pos = self.get_socket_position()
+        self.setPos(socket_pos[0], socket_pos[1])
 
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         painter.setPen(self._pen)
         painter.setBrush(self._brush)
         painter.drawEllipse(-self.radius, -self.radius, 2 * self.radius, 2 * self.radius)
+
+
+    def get_scene_position(self):
+        return self.node.mapToScene(self.pos())
+
+
+    def get_socket_position(self):
+        return self.node.get_socket_placement(self.index, self.position)

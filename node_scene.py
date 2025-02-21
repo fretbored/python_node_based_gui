@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from node_node import Node
+from node_edge import Edge
 
 
 class Scene(QGraphicsScene):
@@ -92,10 +93,14 @@ class Scene(QGraphicsScene):
         node.setPos(position)
         self.nodes.append(node)
         self.addItem(node)
+        if len(self.nodes) == 2:
+            self.add_edge()
 
 
-    def add_edge(self, edge):
+    def add_edge(self):
+        edge = Edge(self, self.nodes[0].output_sockets[0], self.nodes[1].input_sockets[0])
         self.edges.append(edge)
+        self.addItem(edge)
 
 
     def remove_node(self, node):
@@ -103,4 +108,5 @@ class Scene(QGraphicsScene):
 
 
     def remove_edge(self, edge):
+        self.removeItem(edge)
         self.edges.remove(edge)

@@ -12,6 +12,8 @@ class Node(QGraphicsRectItem):
         self.inputs = inputs
         self.outputs = outputs
         self.socket_spacing = 22
+        self.input_sockets = []
+        self.output_sockets = []
 
         # Setup node appearance
         self.width = 180
@@ -43,11 +45,11 @@ class Node(QGraphicsRectItem):
 
         for i in range(len(self.inputs)):
             socket = Socket(node=self, index=i, position=SocketPosition.LEFT_BOTTOM)
-            self.inputs.append(socket)
+            self.input_sockets.append(socket)
 
         for i in range(len(self.outputs)):
             socket = Socket(node=self, index=i, position=SocketPosition.RIGHT_TOP)
-            self.inputs.append(socket)
+            self.output_sockets.append(socket)
 
 
     @property
@@ -124,4 +126,4 @@ class Node(QGraphicsRectItem):
                         (self._padding * 3) -
                         (index * self.socket_spacing))
 
-        return socket_x, socket_y
+        return [socket_x, socket_y]
