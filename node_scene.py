@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 
 from node_node import Node
 from node_edge import Edge
+from node_socket import Socket
 
 
 class Scene(QGraphicsScene):
@@ -13,6 +14,8 @@ class Scene(QGraphicsScene):
         super().__init__(parent)
         self.nodes = []
         self.edges = []
+        self.mouse_position = QPoint(0, 0)
+        self.current_edge = None
 
         self.scene_width = 64000
         self.scene_height = 64000
@@ -85,22 +88,79 @@ class Scene(QGraphicsScene):
         menu.exec_(event.screenPos())
 
 
+    def mouseMoveEvent(self, event):
+        """
+        Store the mouse position in the scene for drawing edges.
+        """
+        self.mouse_position = event.scenePos()
+        if self.current_edge:
+            self.current_edge.update_path()
+        super().mouseMoveEvent(event)
+
+
+    def mouseReleaseEvent(self, event):
+        """
+        Handles the completion of new edges. Edges hovered over an input socket
+        are created, while edges hovered over an output socket are deleted.
+        """
+        if self.current_edge:
+            # Check if mouse is over a socket.
+            items = self.items(event.scenePos())
+            valid_end_socket = None
+
+            for item in items:
+                if isinstance(item, Socket):
+                    if self.current_edge.start_socket.is_input:
+                        # Creating a new edge from an input socket is invalid.
+                        continue
+                    if not item.is_input:
+                        # Connecting a new edge to an output socket is invalid.
+                        continue
+                    if item.is_input and not item.connections:
+                        # Connecting to an empty input socket.
+                        valid_end_socket = item
+                        break
+            
+            if valid_end_socket:
+                # Complete creating the edge.
+                self.current_edge.end_socket = valid_end_socket
+                valid_end_socket.connections.append(self.current_edge)
+                # self.current_edge.update_path()
+            else:
+                # Delete the edge.
+                self.current_edge.start_socket.connections.remove(self.current_edge)
+                self.removeItem(self.current_edge)
+        self.current_edge = None
+        super().mouseReleaseEvent(event)
+
+
+    def create_edge(self, socket):
+        """
+        Create a new edge from the given socket.
+        """
+        self.current_edge = Edge(self, socket)
+        socket.connections.append(self.current_edge)
+        self.edges.append(self.current_edge)
+        self.addItem(self.current_edge)
+
+
     def add_node(self, position):
-        node = Node('My First Node',
+        node = Node(self,
+                    'My First Node',
                     inputs=['foo', 'bar'],
                     outputs=['baz'],
                     parent=self)
         node.setPos(position)
         self.nodes.append(node)
         self.addItem(node)
-        if len(self.nodes) == 2:
-            self.add_edge()
+        # if len(self.nodes) == 2:
+        #     self.add_edge()
 
 
-    def add_edge(self):
-        edge = Edge(self, self.nodes[0].output_sockets[0], self.nodes[1].input_sockets[0])
-        self.edges.append(edge)
-        self.addItem(edge)
+    # def add_edge(self):
+    #     edge = Edge(self, self.nodes[0].output_sockets[0], self.nodes[1].input_sockets[0])
+    #     self.edges.append(edge)
+    #     self.addItem(edge)
 
 
     def remove_node(self, node):

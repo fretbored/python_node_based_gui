@@ -7,8 +7,9 @@ from node_socket import *
 
 
 class Node(QGraphicsRectItem):
-    def __init__(self, title='New Node', inputs=[], outputs=[], width=180, height=240, parent=None):
+    def __init__(self, scene, title='New Node', inputs=[], outputs=[], width=180, height=240, parent=None):
         super().__init__(0, 0, width, height)
+        self.scene = scene
         self.inputs = inputs
         self.outputs = outputs
         self.socket_spacing = 22
@@ -49,7 +50,7 @@ class Node(QGraphicsRectItem):
             self.input_sockets.append(socket)
 
         for i in range(len(self.outputs)):
-            socket = Socket(node=self, index=i, position=SocketPosition.RIGHT_TOP)
+            socket = Socket(node=self, index=i, position=SocketPosition.RIGHT_TOP, is_input=False)
             self.output_sockets.append(socket)
 
 
@@ -114,10 +115,10 @@ class Node(QGraphicsRectItem):
         pass
 
 
-    def get_socket_placement(self, index, position=SocketPosition.LEFT_TOP):
-        socket_x = 0
+    def get_socket_placement(self, index, position=SocketPosition.LEFT_TOP, radius= 6):
+        socket_x = 0 - radius
         if position in (SocketPosition.RIGHT_TOP, SocketPosition.RIGHT_BOTTOM):
-            socket_x = self.width
+            socket_x = self.width - radius
         if position in (SocketPosition.RIGHT_TOP, SocketPosition.LEFT_TOP):
             socket_y = (self.title_height +
                         (self._padding * 3) +

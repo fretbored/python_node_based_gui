@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 
 
 class Edge(QGraphicsPathItem):
-    def __init__(self, scene, start_socket, end_socket):
+    def __init__(self, scene, start_socket, end_socket=None):
         super().__init__()
         self.scene = scene
         self.start_socket = start_socket
@@ -59,15 +59,20 @@ class Edge(QGraphicsPathItem):
 
     def update_path(self):
         start_pos = self.start_socket.get_scene_position()
-        if not self.end_socket:
-            return
-        end_pos = self.end_socket.get_scene_position()
+        # Add the buffer to the y position so that the edge starts at the center of the socket.
+        buffer = self.start_socket.radius
+        path = QPainterPath(QPointF(start_pos.x(), start_pos.y() + buffer))
+        if self.end_socket:
+            # The edge has both a start socket and end socket.
+            end_pos = self.end_socket.get_scene_position()
+        else:
+            # The edge only has a start socket.
+            end_pos = self.scene.mouse_position
         distance = (end_pos.x() - start_pos.x()) / 2
-        path = QPainterPath(QPointF(start_pos.x(), start_pos.y()))
-        
         path.cubicTo(QPointF(start_pos.x() + distance, start_pos.y()),
-                     QPointF(end_pos.x() - distance, end_pos.y()),
-                     QPointF(end_pos.x(), end_pos.y()))
+                    QPointF(end_pos.x() - distance, end_pos.y()),
+                    QPointF(end_pos.x(), end_pos.y() + buffer))
+
         self.setPath(path)
 
 
